@@ -1,24 +1,24 @@
 # 🚀 Complete React Tutorial (Vite + React Router + Tailwind + Redux Toolkit)
 
-A complete beginner-to-intermediate React setup including:
+This is a complete beginner-to-intermediate React documentation including:
 
-- ⚡ Vite
-- 🌐 React Router v6+
-- 🎨 Tailwind CSS (Vite Plugin)
-- 📦 Props
-- 🎯 Events
-- 🧠 useState
-- 🔄 useEffect
-- 📡 Fetch API (with loading & error handling)
-- 📝 Form Handling
-- 🧭 Dynamic Routing (useParams)
+- ⚡ Vite Setup  
+- 🌐 React Router  
+- 🎨 Tailwind CSS  
+- 📦 Props  
+- 🎯 Events  
+- 🧠 useState  
+- 🔄 useEffect  
+- 📡 Fetch API  
+- 📝 Form Handling  
+- 🧭 useParams (Dynamic Routing)  
 - 🗂 Redux Toolkit (RTK)
 
 ---
 
 # 📦 1️⃣ Project Setup
 
-## Create Project
+## Create Project Folder
 
 ```bash
 mkdir Frontend
@@ -36,7 +36,7 @@ npm run dev
 npm install react-router-dom
 ```
 
-> ⚠️ Always use `react-router-dom` for browser applications.
+> ⚠️ Only `react-router-dom` is required for browser applications.
 
 ---
 
@@ -46,19 +46,19 @@ npm install react-router-dom
 npm install tailwindcss @tailwindcss/vite
 ```
 
-### Update `vite.config.js`
+### ✅ Update `vite.config.js`
 
 ```js
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-});
+})
 ```
 
-### Update `src/index.css`
+### ✅ Update `src/index.css`
 
 ```css
 @import "tailwindcss";
@@ -66,7 +66,7 @@ export default defineConfig({
 
 ---
 
-# 📁 4️⃣ Recommended Project Structure
+# 📁 4️⃣ Project Structure
 
 ```
 src/
@@ -81,8 +81,7 @@ src/
 │   ├── Student.jsx
 │   ├── Post.jsx
 │   ├── PostDetails.jsx
-│   ├── ReduxCounter.jsx
-│   └── NotFound.jsx
+│   └── ReduxCounter.jsx
 │
 ├── routers/
 │   └── router.jsx
@@ -91,7 +90,7 @@ src/
 │   └── store.js
 │
 ├── features/
-│   └── counterSlice.js
+│   └── counterSlice/index.js
 │
 ├── App.jsx
 ├── main.jsx
@@ -113,7 +112,6 @@ import Teacher from "../pages/Teacher";
 import Student from "../pages/Student";
 import Post from "../pages/Post";
 import PostDetails from "../pages/PostDetails";
-import NotFound from "../pages/NotFound";
 
 export const myrouter = createBrowserRouter([
   {
@@ -133,7 +131,7 @@ export const myrouter = createBrowserRouter([
       { path: "post/:id", element: <PostDetails /> },
     ],
   },
-  { path: "*", element: <NotFound /> },
+  { path: "*", element: <h1>404 Not Found</h1> },
 ]);
 ```
 
@@ -184,7 +182,9 @@ export default Nav;
 
 ---
 
-# 📥 8️⃣ main.jsx (Without Redux)
+# 📥 8️⃣ main.jsx
+
+## Without Redux
 
 ```js
 import { StrictMode } from "react";
@@ -203,6 +203,23 @@ createRoot(document.getElementById("root")).render(
 ---
 
 # 📦 9️⃣ Passing Props
+
+### Route
+
+```js
+{
+  path: "student",
+  element: (
+    <Student
+      name={"John Doe"}
+      age={20}
+      skills={["JavaScript", "React", "Node.js"]}
+    />
+  ),
+}
+```
+
+### Component
 
 ```js
 const Student = ({ name, age, skills }) => {
@@ -229,9 +246,13 @@ export default Student;
 
 ```js
 const Events = () => {
-  const handleClick = () => alert("Alert!");
+  const handleClick = () => {
+    alert("Alert!!");
+  };
 
-  const add = (a, b) => alert(`${a} + ${b} = ${a + b}`);
+  const add = (a, b) => {
+    alert(`${a} + ${b} = ${a + b}`);
+  };
 
   return (
     <div>
@@ -246,13 +267,13 @@ export default Events;
 
 ---
 
-# 🧠 1️⃣1️⃣ useState (Counter - Best Practice)
+# 🧠 1️⃣1️⃣ useState (Counter)
 
 ```js
 import { useState } from "react";
 
 const Counter = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(10);
 
   return (
     <div>
@@ -277,7 +298,7 @@ const UseEffect = () => {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    console.log("Counter changed:", counter);
+    console.log(counter);
   }, [counter]);
 
   return (
@@ -294,39 +315,27 @@ export default UseEffect;
 
 ---
 
-# 📡 1️⃣3️⃣ Fetch API (With Loading + Error Handling)
+# 📡 1️⃣3️⃣ Fetch Data
 
 ```js
 import { useState, useEffect } from "react";
 
 const FetchData = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const res = await fetch("https://jsonplaceholder.typicode.com/todos");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const result = await res.json();
-        setData(result);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+      const res = await fetch("https://jsonplaceholder.typicode.com/todos/");
+      const data = await res.json();
+      setApiData(data);
     };
 
     fetchData();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
     <ul>
-      {data.map(item => (
+      {apiData.map((item) => (
         <li key={item.id}>{item.title}</li>
       ))}
     </ul>
@@ -379,6 +388,10 @@ export default Form;
 
 # 🧭 1️⃣5️⃣ Dynamic Routing (useParams)
 
+```js
+import { Link, useParams } from "react-router-dom";
+```
+
 ## Post.jsx
 
 ```js
@@ -392,9 +405,11 @@ const Post = () => {
 
   return (
     <ul>
-      {posts.map(post => (
-        <li key={post.id}>
-          <Link to={`/post/${post.id}`}>{post.title}</Link>
+      {posts.map((item) => (
+        <li key={item.id}>
+          <Link to={`/post/${item.id}`}>
+            {item.title}
+          </Link>
         </li>
       ))}
     </ul>
@@ -417,16 +432,16 @@ const PostDetails = () => {
     { id: 2, title: "Post 2", content: "Content 2" },
   ];
 
-  const post = posts.find(p => p.id === parseInt(id));
+  const details = posts.find((item) => item.id === parseInt(id));
 
-  if (!post) return <p>Post not found</p>;
-
-  return (
+  return details ? (
     <div>
-      <h2>{post.title}</h2>
-      <p>{post.content}</p>
-      <Link to="/post">Back to Posts</Link>
+      <h2>{details.title}</h2>
+      <p>{details.content}</p>
+      <Link to="/post">Back</Link>
     </div>
+  ) : (
+    <p>Post not found</p>
   );
 };
 
@@ -460,14 +475,16 @@ export const store = configureStore({
 
 ---
 
-## `src/features/counterSlice.js`
+## `src/features/counterSlice/index.js`
 
 ```js
 import { createSlice } from "@reduxjs/toolkit";
 
-const counterSlice = createSlice({
+const initialState = { value: 0 };
+
+export const counterSlice = createSlice({
   name: "counter",
-  initialState: { value: 0 },
+  initialState,
   reducers: {
     increment: (state) => { state.value += 1 },
     decrement: (state) => { state.value -= 1 },
@@ -483,7 +500,7 @@ export default counterSlice.reducer;
 
 ---
 
-## Redux `main.jsx`
+## Redux main.jsx
 
 ```js
 import { StrictMode } from "react";
@@ -512,7 +529,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { increment, decrement, incrementByAmount } from "../features/counterSlice";
 
 const ReduxCounter = () => {
-  const count = useSelector(state => state.counter.value);
+  const count = useSelector((state) => state.counter.value);
   const dispatch = useDispatch();
 
   return (
@@ -532,5 +549,5 @@ export default ReduxCounter;
 
 ---
 
-# 🎉 Completed
+# ✅ Complete React Tutorial Finished
 
