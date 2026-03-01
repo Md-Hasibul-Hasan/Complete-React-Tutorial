@@ -1,4 +1,4 @@
-# 🚀 Complete React Tutorial (Vite + React Router + Tailwind + Redux Toolkit)
+# 🚀 Complete React Tutorial 
 
 This is a complete beginner-to-intermediate React documentation including:
 
@@ -34,8 +34,9 @@ npm run dev
 
 ```bash
 npm install react-router-dom
-npm install react-router
 ```
+
+> ⚠️ Only `react-router-dom` is required for browser applications.
 
 ---
 
@@ -117,17 +118,17 @@ export const myrouter = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      { path: "", element: <Home /> },
+      { index: true, element: <Home /> },
       {
-        path: "/about",
+        path: "about",
         element: <About />,
         children: [
-          { path: "", element: <Teacher /> },
+          { index: true, element: <Teacher /> },
           { path: "student", element: <Student /> },
         ],
       },
-      { path: "/post", element: <Post /> },
-      { path: "/post/:id", element: <PostDetails /> },
+      { path: "post", element: <Post /> },
+      { path: "post/:id", element: <PostDetails /> },
     ],
   },
   { path: "*", element: <h1>404 Not Found</h1> },
@@ -142,7 +143,7 @@ export const myrouter = createBrowserRouter([
 
 ```js
 import Nav from "./components/Nav";
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   return (
@@ -163,7 +164,7 @@ export default App;
 ## `Nav.jsx`
 
 ```js
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const Nav = () => {
   return (
@@ -277,8 +278,8 @@ const Counter = () => {
   return (
     <div>
       <h3>Value: {count}</h3>
-      <button onClick={() => setCount(count + 1)}>Inc</button>
-      <button onClick={() => setCount(count - 1)}>Dec</button>
+      <button onClick={() => setCount(prev => prev + 1)}>Inc</button>
+      <button onClick={() => setCount(prev => prev - 1)}>Dec</button>
     </div>
   );
 };
@@ -303,8 +304,8 @@ const UseEffect = () => {
   return (
     <div>
       <h2>{counter}</h2>
-      <button onClick={() => setCounter(counter + 1)}>Inc</button>
-      <button onClick={() => setCounter(counter - 1)}>Dec</button>
+      <button onClick={() => setCounter(prev => prev + 1)}>Inc</button>
+      <button onClick={() => setCounter(prev => prev - 1)}>Dec</button>
     </div>
   );
 };
@@ -361,7 +362,7 @@ const Form = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
@@ -371,11 +372,11 @@ const Form = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input name="name" value={formData.name} onChange={handleChange} />
-      <input name="email" value={formData.email} onChange={handleChange} />
-      <input name="pass" value={formData.pass} onChange={handleChange} />
-      <input name="phone" value={formData.phone} onChange={handleChange} />
-      <button>Submit</button>
+      <input type="text" name="name" value={formData.name} onChange={handleChange} />
+      <input type="email" name="email" value={formData.email} onChange={handleChange} />
+      <input type="password" name="pass" value={formData.pass} onChange={handleChange} />
+      <input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
+      <button type="submit">Submit</button>
     </form>
   );
 };
@@ -394,6 +395,8 @@ import { Link, useParams } from "react-router-dom";
 ## Post.jsx
 
 ```js
+import { Link } from "react-router-dom";
+
 const Post = () => {
   const posts = [
     { id: 1, title: "Post 1", content: "Content 1" },
@@ -403,9 +406,11 @@ const Post = () => {
   return (
     <ul>
       {posts.map((item) => (
-        <Link key={item.id} to={`/post/${item.id}`}>
-          <li>{item.title}</li>
-        </Link>
+        <li key={item.id}>
+          <Link to={`/post/${item.id}`}>
+            {item.title}
+          </Link>
+        </li>
       ))}
     </ul>
   );
@@ -417,6 +422,8 @@ export default Post;
 ## PostDetails.jsx
 
 ```js
+import { useParams, Link } from "react-router-dom";
+
 const PostDetails = () => {
   const { id } = useParams();
 
@@ -496,6 +503,7 @@ export default counterSlice.reducer;
 ## Redux main.jsx
 
 ```js
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
@@ -504,9 +512,11 @@ import { myrouter } from "./routers/router";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <RouterProvider router={myrouter} />
-  </Provider>
+  <StrictMode>
+    <Provider store={store}>
+      <RouterProvider router={myrouter} />
+    </Provider>
+  </StrictMode>
 );
 ```
 
@@ -539,4 +549,5 @@ export default ReduxCounter;
 
 ---
 
-# ✅ Complete React Tutorial Finished
+# ✅ Completed React Tutorial 
+
