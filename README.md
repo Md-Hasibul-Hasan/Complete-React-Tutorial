@@ -549,9 +549,5 @@ export default ReduxCounter;
 
 ---
 
-<<<<<<< HEAD
 # ✅ Completed React Tutorial 
-=======
-# ✅ Complete React Tutorial Finished
->>>>>>> 6720dc9af93bec0e2a839805be92c9375e81c75b
 
