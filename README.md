@@ -1,24 +1,24 @@
 # 🚀 Complete React Tutorial (Vite + React Router + Tailwind + Redux Toolkit)
 
-This is a complete beginner-to-intermediate React documentation including:
+A complete beginner-to-intermediate React setup including:
 
-- ⚡ Vite Setup  
-- 🌐 React Router  
-- 🎨 Tailwind CSS  
-- 📦 Props  
-- 🎯 Events  
-- 🧠 useState  
-- 🔄 useEffect  
-- 📡 Fetch API  
-- 📝 Form Handling  
-- 🧭 useParams (Dynamic Routing)  
+- ⚡ Vite
+- 🌐 React Router v6+
+- 🎨 Tailwind CSS (Vite Plugin)
+- 📦 Props
+- 🎯 Events
+- 🧠 useState
+- 🔄 useEffect
+- 📡 Fetch API (with loading & error handling)
+- 📝 Form Handling
+- 🧭 Dynamic Routing (useParams)
 - 🗂 Redux Toolkit (RTK)
 
 ---
 
 # 📦 1️⃣ Project Setup
 
-## Create Project Folder
+## Create Project
 
 ```bash
 mkdir Frontend
@@ -34,8 +34,9 @@ npm run dev
 
 ```bash
 npm install react-router-dom
-npm install react-router
 ```
+
+> ⚠️ Always use `react-router-dom` for browser applications.
 
 ---
 
@@ -45,19 +46,19 @@ npm install react-router
 npm install tailwindcss @tailwindcss/vite
 ```
 
-### ✅ Update `vite.config.js`
+### Update `vite.config.js`
 
 ```js
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-})
+});
 ```
 
-### ✅ Update `src/index.css`
+### Update `src/index.css`
 
 ```css
 @import "tailwindcss";
@@ -65,7 +66,7 @@ export default defineConfig({
 
 ---
 
-# 📁 4️⃣ Project Structure
+# 📁 4️⃣ Recommended Project Structure
 
 ```
 src/
@@ -80,7 +81,8 @@ src/
 │   ├── Student.jsx
 │   ├── Post.jsx
 │   ├── PostDetails.jsx
-│   └── ReduxCounter.jsx
+│   ├── ReduxCounter.jsx
+│   └── NotFound.jsx
 │
 ├── routers/
 │   └── router.jsx
@@ -89,7 +91,7 @@ src/
 │   └── store.js
 │
 ├── features/
-│   └── counterSlice/index.js
+│   └── counterSlice.js
 │
 ├── App.jsx
 ├── main.jsx
@@ -111,26 +113,27 @@ import Teacher from "../pages/Teacher";
 import Student from "../pages/Student";
 import Post from "../pages/Post";
 import PostDetails from "../pages/PostDetails";
+import NotFound from "../pages/NotFound";
 
 export const myrouter = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { path: "", element: <Home /> },
+      { index: true, element: <Home /> },
       {
-        path: "/about",
+        path: "about",
         element: <About />,
         children: [
-          { path: "", element: <Teacher /> },
+          { index: true, element: <Teacher /> },
           { path: "student", element: <Student /> },
         ],
       },
-      { path: "/post", element: <Post /> },
-      { path: "/post/:id", element: <PostDetails /> },
+      { path: "post", element: <Post /> },
+      { path: "post/:id", element: <PostDetails /> },
     ],
   },
-  { path: "*", element: <h1>404 Not Found</h1> },
+  { path: "*", element: <NotFound /> },
 ]);
 ```
 
@@ -142,7 +145,7 @@ export const myrouter = createBrowserRouter([
 
 ```js
 import Nav from "./components/Nav";
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   return (
@@ -163,7 +166,7 @@ export default App;
 ## `Nav.jsx`
 
 ```js
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const Nav = () => {
   return (
@@ -181,9 +184,7 @@ export default Nav;
 
 ---
 
-# 📥 8️⃣ main.jsx
-
-## Without Redux
+# 📥 8️⃣ main.jsx (Without Redux)
 
 ```js
 import { StrictMode } from "react";
@@ -202,23 +203,6 @@ createRoot(document.getElementById("root")).render(
 ---
 
 # 📦 9️⃣ Passing Props
-
-### Route
-
-```js
-{
-  path: "student",
-  element: (
-    <Student
-      name={"John Doe"}
-      age={20}
-      skills={["JavaScript", "React", "Node.js"]}
-    />
-  ),
-}
-```
-
-### Component
 
 ```js
 const Student = ({ name, age, skills }) => {
@@ -245,13 +229,9 @@ export default Student;
 
 ```js
 const Events = () => {
-  const handleClick = () => {
-    alert("Alert!!");
-  };
+  const handleClick = () => alert("Alert!");
 
-  const add = (a, b) => {
-    alert(`${a} + ${b} = ${a + b}`);
-  };
+  const add = (a, b) => alert(`${a} + ${b} = ${a + b}`);
 
   return (
     <div>
@@ -266,19 +246,19 @@ export default Events;
 
 ---
 
-# 🧠 1️⃣1️⃣ useState (Counter)
+# 🧠 1️⃣1️⃣ useState (Counter - Best Practice)
 
 ```js
 import { useState } from "react";
 
 const Counter = () => {
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(0);
 
   return (
     <div>
       <h3>Value: {count}</h3>
-      <button onClick={() => setCount(count + 1)}>Inc</button>
-      <button onClick={() => setCount(count - 1)}>Dec</button>
+      <button onClick={() => setCount(prev => prev + 1)}>Inc</button>
+      <button onClick={() => setCount(prev => prev - 1)}>Dec</button>
     </div>
   );
 };
@@ -297,14 +277,14 @@ const UseEffect = () => {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    console.log(counter);
+    console.log("Counter changed:", counter);
   }, [counter]);
 
   return (
     <div>
       <h2>{counter}</h2>
-      <button onClick={() => setCounter(counter + 1)}>Inc</button>
-      <button onClick={() => setCounter(counter - 1)}>Dec</button>
+      <button onClick={() => setCounter(prev => prev + 1)}>Inc</button>
+      <button onClick={() => setCounter(prev => prev - 1)}>Dec</button>
     </div>
   );
 };
@@ -314,27 +294,39 @@ export default UseEffect;
 
 ---
 
-# 📡 1️⃣3️⃣ Fetch Data
+# 📡 1️⃣3️⃣ Fetch API (With Loading + Error Handling)
 
 ```js
 import { useState, useEffect } from "react";
 
 const FetchData = () => {
-  const [apiData, setApiData] = useState([]);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("https://jsonplaceholder.typicode.com/todos/");
-      const data = await res.json();
-      setApiData(data);
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+        if (!res.ok) throw new Error("Failed to fetch");
+        const result = await res.json();
+        setData(result);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
   }, []);
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <ul>
-      {apiData.map((item) => (
+      {data.map(item => (
         <li key={item.id}>{item.title}</li>
       ))}
     </ul>
@@ -361,7 +353,7 @@ const Form = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
@@ -371,11 +363,11 @@ const Form = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input name="name" value={formData.name} onChange={handleChange} />
-      <input name="email" value={formData.email} onChange={handleChange} />
-      <input name="pass" value={formData.pass} onChange={handleChange} />
-      <input name="phone" value={formData.phone} onChange={handleChange} />
-      <button>Submit</button>
+      <input type="text" name="name" value={formData.name} onChange={handleChange} />
+      <input type="email" name="email" value={formData.email} onChange={handleChange} />
+      <input type="password" name="pass" value={formData.pass} onChange={handleChange} />
+      <input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
+      <button type="submit">Submit</button>
     </form>
   );
 };
@@ -387,13 +379,11 @@ export default Form;
 
 # 🧭 1️⃣5️⃣ Dynamic Routing (useParams)
 
-```js
-import { Link, useParams } from "react-router-dom";
-```
-
 ## Post.jsx
 
 ```js
+import { Link } from "react-router-dom";
+
 const Post = () => {
   const posts = [
     { id: 1, title: "Post 1", content: "Content 1" },
@@ -402,10 +392,10 @@ const Post = () => {
 
   return (
     <ul>
-      {posts.map((item) => (
-        <Link key={item.id} to={`/post/${item.id}`}>
-          <li>{item.title}</li>
-        </Link>
+      {posts.map(post => (
+        <li key={post.id}>
+          <Link to={`/post/${post.id}`}>{post.title}</Link>
+        </li>
       ))}
     </ul>
   );
@@ -417,6 +407,8 @@ export default Post;
 ## PostDetails.jsx
 
 ```js
+import { useParams, Link } from "react-router-dom";
+
 const PostDetails = () => {
   const { id } = useParams();
 
@@ -425,16 +417,16 @@ const PostDetails = () => {
     { id: 2, title: "Post 2", content: "Content 2" },
   ];
 
-  const details = posts.find((item) => item.id === parseInt(id));
+  const post = posts.find(p => p.id === parseInt(id));
 
-  return details ? (
+  if (!post) return <p>Post not found</p>;
+
+  return (
     <div>
-      <h2>{details.title}</h2>
-      <p>{details.content}</p>
-      <Link to="/post">Back</Link>
+      <h2>{post.title}</h2>
+      <p>{post.content}</p>
+      <Link to="/post">Back to Posts</Link>
     </div>
-  ) : (
-    <p>Post not found</p>
   );
 };
 
@@ -468,16 +460,14 @@ export const store = configureStore({
 
 ---
 
-## `src/features/counterSlice/index.js`
+## `src/features/counterSlice.js`
 
 ```js
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { value: 0 };
-
-export const counterSlice = createSlice({
+const counterSlice = createSlice({
   name: "counter",
-  initialState,
+  initialState: { value: 0 },
   reducers: {
     increment: (state) => { state.value += 1 },
     decrement: (state) => { state.value -= 1 },
@@ -493,9 +483,10 @@ export default counterSlice.reducer;
 
 ---
 
-## Redux main.jsx
+## Redux `main.jsx`
 
 ```js
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
@@ -504,9 +495,11 @@ import { myrouter } from "./routers/router";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <RouterProvider router={myrouter} />
-  </Provider>
+  <StrictMode>
+    <Provider store={store}>
+      <RouterProvider router={myrouter} />
+    </Provider>
+  </StrictMode>
 );
 ```
 
@@ -519,7 +512,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { increment, decrement, incrementByAmount } from "../features/counterSlice";
 
 const ReduxCounter = () => {
-  const count = useSelector((state) => state.counter.value);
+  const count = useSelector(state => state.counter.value);
   const dispatch = useDispatch();
 
   return (
@@ -539,4 +532,5 @@ export default ReduxCounter;
 
 ---
 
-# ✅ Complete React Tutorial Finished
+# 🎉 Completed
+
