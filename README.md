@@ -464,38 +464,48 @@ npm install @reduxjs/toolkit react-redux
 
 ```js
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "../features/counterSlice";
+import mycounterReducer from "../features/counter/counterSlice";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    storeCounter: mycounterReducer,
+    storeCounter2: mycounterReducer,
   },
 });
 ```
 
 ---
 
-## `src/features/counterSlice/index.js`
+## `src/features/counter/counterSlice.js`
 
 ```js
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { value: 0 };
+const initialState = {
+    id:1,
+    value:10
+};
 
 export const counterSlice = createSlice({
-  name: "counter",
-  initialState,
-  reducers: {
-    increment: (state) => { state.value += 1 },
-    decrement: (state) => { state.value -= 1 },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
-    },
-  },
-});
+    name:"sliceCounter",
+    initialState:initialState,
+    reducers:{
+        increment: (state)=>{
+            state.value += 1;
+        },
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
-export default counterSlice.reducer;
+        decrement: (st)=>{
+            st.value -= 1;
+        },
+
+        customInc: (state,action)=>{
+            state.value += action.payload
+        }
+    }
+})
+
+export const {increment, decrement, customInc} = counterSlice.actions;
+export default counterSlice.reducer
 ```
 
 ---
@@ -525,26 +535,33 @@ createRoot(document.getElementById("root")).render(
 ## ReduxCounter.jsx
 
 ```js
-import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement, incrementByAmount } from "../features/counterSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { customInc, decrement, increment } from '../features/counter/counterSlice';
 
-const ReduxCounter = () => {
-  const count = useSelector((state) => state.counter.value);
-  const dispatch = useDispatch();
-
-  return (
-    <div>
-      <h2>Count: {count}</h2>
-      <button onClick={() => dispatch(increment())}>Inc</button>
-      <button onClick={() => dispatch(decrement())}>Dec</button>
-      <button onClick={() => dispatch(incrementByAmount(5))}>
-        Inc by 5
-      </button>
-    </div>
-  );
+const Counter = () => {
+    const {id, value} = useSelector((state)=>state.storeCounter);
+    // console.log(state);    => state = { storeCounter: {id:1, value:10 } }
+    const dispatch = useDispatch();
+    return (
+        <div>
+            <h3>Count:{value}</h3>
+            <button onClick={() =>{
+                dispatch(increment());
+                console.log(dispatch(increment()));
+            } }>Inc</button>
+            <button onClick={() =>{
+                dispatch(decrement());
+                console.log(dispatch(decrement()));
+            } }>Dec</button>
+            <button onClick={() => {
+                dispatch(customInc(5));
+                console.log(dispatch(customInc(5)));
+            }}>Custom</button>
+        </div>
+    );
 };
 
-export default ReduxCounter;
+export default Counter;
 ```
 
 ---
