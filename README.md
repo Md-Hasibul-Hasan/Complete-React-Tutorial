@@ -182,6 +182,36 @@ export default Nav;
 
 ---
 
+## `About.jsx`
+
+```js
+import React from 'react';
+import { Link, Outlet, useNavigate } from 'react-router';
+
+const About = () => {
+    const navigate = useNavigate();
+    const prev = ()=> navigate(-1);
+    const next = ()=> navigate("/post");
+    return (
+        <div>
+            <h1>About Us</h1>
+            <nav>
+                <Link to="">Teacher</Link> {" | "}
+                <Link to="student">Student</Link>
+                <hr />
+            </nav>
+            <div> <Outlet /> </div>
+            <button onClick={prev}>Previous</button>
+            <button onClick={next}>Next</button>
+        </div>
+    );
+};
+
+export default About;
+```
+
+---
+
 # 📥 8️⃣ main.jsx
 
 ## Without Redux
@@ -315,6 +345,50 @@ export default UseEffect;
 
 ---
 
+# Map and Filter
+
+```js
+
+const Map_Filter = () => {
+    const products = [
+        {id:1, name:'Product 1', price:100},
+        {id:2, name:'Product 2', price:200},
+        {id:3, name:'Product 3', price:300},
+    ]
+
+    const filteredProducts = products.filter((item,idx)=>{
+        return item.price > 100;
+    })
+
+    return (
+        <div>
+            <h1> Using map </h1>
+            <ul>
+                {products.map((item,idx)=>(
+                  <li key={idx}>{item.name} - {item.price}</li>  
+                ))}
+            </ul>
+
+            <h3> price {">"} 100 </h3>
+            <ul>
+                {
+                    filteredProducts.map((item,idx)=>{
+                        return (
+                            <li>{item.name}</li>
+                        )
+                    })
+                }
+            </ul>
+            
+        </div>
+    );
+};
+
+export default Map_Filter;
+```
+
+---
+
 # 📡 1️⃣3️⃣ Fetch Data
 
 ```js
@@ -387,10 +461,6 @@ export default Form;
 ---
 
 # 🧭 1️⃣5️⃣ Dynamic Routing (useParams)
-
-```js
-import { Link, useParams } from "react-router-dom";
-```
 
 ## Post.jsx
 

@@ -215,7 +215,6 @@ export default Counter;
 
 // Map and Filter
 
-
 const Map_Filter = () => {
     const products = [
         {id:1, name:'Product 1', price:100},
