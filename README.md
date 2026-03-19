@@ -423,6 +423,51 @@ export default FetchData;
 
 ---
 
+# Advance Fetch Data
+
+```js
+import React, { useEffect, useState } from "react";
+
+const FetchData = () => {
+  const [apidata, setapidata] = useState([]);
+  const [loading, setloading] = useState(true);
+  const [error, seterror] = useState("");
+
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const api = await fetch("https://jsonplaceholder.typicode.com/todos/");
+        const data = await api.json();
+        setapidata(data);
+      } catch (err) {
+        seterror("Error: " + err.message);
+      } finally {
+        setloading(false);
+      }
+    };
+
+    fetchdata();
+  }, []);
+
+  if (loading) return <h2>Loading...</h2>;
+  if (error) return <h2>{error}</h2>;
+
+  return (
+    <div>
+      <ul>
+        {apidata.map((item) => (
+          <li key={item.id}>{item.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default FetchData;
+```
+
+---
+
 # 📝 1️⃣4️⃣ Form Handling
 
 ```js
